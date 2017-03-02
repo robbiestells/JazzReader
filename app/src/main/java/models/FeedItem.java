@@ -122,6 +122,11 @@ public class FeedItem implements Parcelable {
     }
 
     public FeedItem(){}
+    public FeedItem(String type, String title, String createdAt){
+        this.type = type;
+        this.title = title;
+        this.createdAt = createdAt;
+    }
 
     public FeedItem(String type, String title, String shortDescription, String imageLink, String imageLinkRetina,
                     String link, String releaseDate, String shareLink, String createdAt, String updatedAt){
