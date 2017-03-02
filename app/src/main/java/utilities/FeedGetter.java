@@ -6,9 +6,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.primeperspective.jazzreader.MainActivity;
 import com.primeperspective.jazzreader.R;
 
 import org.json.JSONArray;
@@ -33,6 +35,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import adapters.FeedAdapter;
 import models.FeedItem;
 
 import static android.R.attr.rating;
@@ -41,15 +44,16 @@ import static android.R.attr.rating;
  * Created by rob on 3/2/17.
  */
 
-public class FeedGetter extends AsyncTask<Void, Void, Void> {
+public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
     private static final String LOG_TAG = "ASYNC ";
-    Context context;
+    MainActivity activity;
     URL url;
     ProgressDialog progressDialog;
     ArrayList<FeedItem> feedItems;
+    FeedAdapter feedAdapter;
 
-    public FeedGetter(Context context) {
-        this.context = context;
+    public FeedGetter(MainActivity mainActivity) {
+        this.activity = mainActivity;
     }
 
 
@@ -60,7 +64,7 @@ public class FeedGetter extends AsyncTask<Void, Void, Void> {
         //TODO check for internet connection
 
         //display loading screen
-        progressDialog = new ProgressDialog(context);
+        progressDialog = new ProgressDialog(activity);
         //Set the progress dialog to display spinner
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         //Set the dialog title to 'Looking...'
@@ -71,35 +75,37 @@ public class FeedGetter extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-
+    protected void onPostExecute(ArrayList<FeedItem> feedItems) {
+        super.onPostExecute(feedItems);
+        activity.setFeedItems(feedItems);
+        //feedAdapter = new FeedAdapter(context, feedItems);
         //dismiss loading dialog
         progressDialog.dismiss();
+
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected ArrayList<FeedItem> doInBackground(Void... params) {
         
         String feed = "http://trrc.sliday.com/api/data.json";
         URL url = createUrl(feed);
         String jsonResponse;
         try {
             jsonResponse = makeHttpRequest(url);
-            List<FeedItem> feedItems = extractFeatureFromJson(jsonResponse);
+            feedItems = extractFeatureFromJson(jsonResponse);
         } catch (IOException e) {
             Log.e("ASYNC: ", "Problem making the HTTP request.", e);
         }
 
-        return null;
+        return feedItems;
     }
 
-    public static List<FeedItem> extractFeatureFromJson(String channelJson) {
+    public static ArrayList<FeedItem> extractFeatureFromJson(String channelJson) {
         if (TextUtils.isEmpty(channelJson)) {
             return null;
         }
 
-        List<FeedItem> feedItems = new ArrayList<>();
+        ArrayList<FeedItem> feedItems = new ArrayList<>();
 
         try {
             JSONObject baseJsonResponse = new JSONObject(channelJson);
@@ -132,8 +138,6 @@ public class FeedGetter extends AsyncTask<Void, Void, Void> {
                         feedItems.add(feedItem);
                     }
                 }
-
-
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing the JSON results", e);
