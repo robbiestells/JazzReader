@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         }
         feedAdapter = new FeedAdapter(this, feedItems);
         feedList.setAdapter(feedAdapter);
+
     }
 
     @Override
@@ -34,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         feedList = (RecyclerView) findViewById(R.id.feedList);
+        feedList.setLayoutManager(new LinearLayoutManager(this));
 
         FeedGetter getFeed = new FeedGetter(this);
         getFeed.execute();
 
-//        feedList.setLayoutManager(new LinearLayoutManager(getContext()));
 //        feedList.getLayoutManager().isSmoothScrolling();
 
     }
