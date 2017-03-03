@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
            }
            feedAdapter = new FeedAdapter(this, feedItems);
            feedList.setAdapter(feedAdapter);
+
+//        feedList.getLayoutManager().isSmoothScrolling();
        }
     }
 
@@ -41,7 +43,14 @@ public class MainActivity extends AppCompatActivity {
         FeedGetter getFeed = new FeedGetter(this);
         getFeed.execute();
 
-//        feedList.getLayoutManager().isSmoothScrolling();
+        //Check for any issues with Youtube
+//        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
+//
+//        if (result != YouTubeInitializationResult.SUCCESS) {
+//            //If there are any issues we can show an error dialog.
+//            result.getErrorDialog(this, 0).show();
+//        }
+
 
     }
 }

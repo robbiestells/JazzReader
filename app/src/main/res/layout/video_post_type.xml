@@ -8,15 +8,29 @@
     app:cardUseCompatPadding="true"
     android:elevation="4dp">
 
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
-    <VideoView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/videoView"/>
 
-</LinearLayout>
+    <!--<VideoView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:id="@+id/videoView"/>-->
+
+ <WebView
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:id="@+id/videoView"/>
+
+    <TextView
+        android:id="@+id/videoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title here"
+        android:textColor="@android:color/white"
+        android:background="@xml/video_header_background"/>
+
+</RelativeLayout>
 
     </android.support.v7.widget.CardView>

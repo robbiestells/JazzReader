@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -184,7 +186,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class VideoViewHolder extends RecyclerView.ViewHolder {
-        VideoView videoView;
+        TextView videoTitle;
+        WebView videoView;
         CardView cardView;
 
         public VideoViewHolder(View itemView) {
@@ -193,19 +196,24 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             //itemView.setOnClickListener(this);
 
             //get views
-            videoView = (VideoView) itemView.findViewById(R.id.videoView);
+            videoView = (WebView) itemView.findViewById(R.id.videoView);
+            videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
 
         }
         public void bindData(FeedItem item){
 
-            MediaController mediaController= new MediaController(context);
-            mediaController.setAnchorView(videoView);
-            Uri uri=Uri.parse(item.getVideoLink());
-            videoView.setMediaController(mediaController);
-            videoView.setVideoURI(uri);
-            videoView.requestFocus();
-
-            videoView.start();
+//            MediaController mediaController= new MediaController(context);
+//            mediaController.setAnchorView(videoView);
+//            Uri uri=Uri.parse(item.getVideoLink());
+//            videoView.setMediaController(mediaController);
+//            videoView.setVideoURI(uri);
+//            videoView.requestFocus();
+//
+//            videoView.start();
+          //  videoView.getSettings().setJavaScriptEnabled(true);
+          //  videoView.setWebChromeClient(new WebChromeClient(){});
+          //  videoView.loadUrl(item.getVideoLink());
+            videoTitle.setText(item.getTitle());
 
         }
 
