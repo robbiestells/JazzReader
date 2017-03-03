@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,15 +31,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import adapters.FeedAdapter;
+import models.Artist;
 import models.FeedItem;
+import models.Genre;
 
 import static android.R.attr.rating;
+import static android.R.attr.type;
 
 /**
  * Created by rob on 3/2/17.
@@ -127,14 +134,83 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                         JSONObject currentArticle = articleArray.getJSONObject(a);
 
                         // Extract out data
+                        String id = currentArticle.getString("id");
                         String title = currentArticle.getString("title");
                         String type = currentArticle.getString("type");
+                        String shareLink = currentArticle.getString("shareLink");
                         String createdAt = currentArticle.getString("createdAt");
+                        String updatedAt = currentArticle.getString("updatedAt");
+                        String shortDescription = "";
+                        String imageLink = "";
+                        String imageLinkRetina = "";
+                        String link = "";
+                        String price = "";
+                        String releaseDate = "";
+                        String videoLink = "";
 
-                        // Create a new Movie object
-                        FeedItem feedItem = new FeedItem(type, title, createdAt);
+                        if (type.contains("release") || type.contains("event") || type.contains("link") || type.contains("news")){
+                             shortDescription = currentArticle.getString("shortDescription");
+                             imageLink = currentArticle.getString("imageLink");
+                             imageLinkRetina = currentArticle.getString("imageLinkRetina");
+                             link = currentArticle.getString("link");
+                        }
 
-                        //add movies to list
+                        if (type.contains("release") || type.contains("event")) {
+                             price = currentArticle.getString("price");
+                        }
+
+                        if (type.contains("release")) {
+                             releaseDate = currentArticle.getString("releaseDate");
+                        }
+                        if (type.contains("video") || type.contains("news")) {
+                             videoLink = currentArticle.getString("videoLink");
+                        }
+                        if (type.contains("event") || type.contains("news")) {
+                            String article = currentArticle.getString("article");
+                        }
+                        if (type.contains("event")) {
+                            String eventDate = currentArticle.getString("eventDate");
+                            String eventLocation = currentArticle.getString("eventLocation");
+                        }
+
+                        ArrayList<Artist> artists = new ArrayList<>();
+                        JSONArray artistArray = currentArticle.getJSONArray("artists");
+                        for (int ar = 0; ar < artistArray.length(); ar++) {
+                            JSONObject currentArtist = artistArray.getJSONObject(ar);
+
+                            //extract artist data
+                            String artistId = currentArtist.getString("id");
+                            String artistName = currentArtist.getString("artistName");
+                            String topicName = currentArtist.getString("topicName");
+                            String artistImage = currentArtist.getString("artistImage");
+                            String artistImageRetina = currentArtist.getString("artistImageRetina");
+                            String artistBio = currentArtist.getString("artistBio");
+
+                            Artist artist = new Artist(artistId, artistName, topicName, artistImage, artistImageRetina, artistBio);
+                            artists.add(artist);
+
+                        }
+
+                        ArrayList<Genre> genres = new ArrayList<>();
+                        JSONArray genreArray = currentArticle.getJSONArray("genres");
+                        for (int g = 0; g < genreArray.length(); g++) {
+                            JSONObject currentGenre = genreArray.getJSONObject(g);
+
+                            //extract artist data
+                            String genreId = currentGenre.getString("id");
+                            String genreName = currentGenre.getString("genreName");
+                            String topicName = currentGenre.getString("topicName");
+
+                            Genre genre = new Genre(genreId, genreName, topicName);
+                            genres.add(genre);
+
+                        }
+
+                        // Create a new FeedItem object
+                        FeedItem feedItem = new FeedItem(id, type, title, shortDescription, imageLink, imageLinkRetina,
+                                link, releaseDate, shareLink, createdAt, updatedAt, artists, genres);
+
+                        //add feed item to list
                         feedItems.add(feedItem);
                     }
                 }

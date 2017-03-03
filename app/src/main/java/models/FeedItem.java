@@ -3,6 +3,9 @@ package models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.R.attr.description;
 
 /**
@@ -10,6 +13,7 @@ import static android.R.attr.description;
  */
 
 public class FeedItem implements Parcelable {
+    String id;
     String type;
     String title;
     String shortDescription;
@@ -20,8 +24,31 @@ public class FeedItem implements Parcelable {
     String shareLink;
     String createdAt;
     String updatedAt;
-//    String artists;
-//    String genres;
+    ArrayList<Artist> artists;
+    ArrayList<Genre> genres;
+
+    public ArrayList<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(ArrayList<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public ArrayList<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(ArrayList<Artist> artists) {
+        this.artists = artists;
+    }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getType() {
         return type;
@@ -109,6 +136,7 @@ public class FeedItem implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int i) {
+        out.writeString(id);
         out.writeString(type);
         out.writeString(title);
         out.writeString(shortDescription);
@@ -119,17 +147,21 @@ public class FeedItem implements Parcelable {
         out.writeString(shareLink);
         out.writeString(createdAt);
         out.writeString(updatedAt);
+        out.writeList(artists);
+        out.writeList(genres);
     }
 
     public FeedItem(){}
-    public FeedItem(String type, String title, String createdAt){
+    public FeedItem(String type, String title, String createdAt, ArrayList<Artist> artists){
         this.type = type;
         this.title = title;
         this.createdAt = createdAt;
+        this.artists = artists;
     }
 
-    public FeedItem(String type, String title, String shortDescription, String imageLink, String imageLinkRetina,
-                    String link, String releaseDate, String shareLink, String createdAt, String updatedAt){
+    public FeedItem(String id, String type, String title, String shortDescription, String imageLink, String imageLinkRetina,
+                    String link, String releaseDate, String shareLink, String createdAt, String updatedAt, ArrayList<Artist> artists, ArrayList<Genre> genres){
+        this.id = id;
         this.type = type;
         this.title = title;
         this.shortDescription = shortDescription;
@@ -140,9 +172,12 @@ public class FeedItem implements Parcelable {
         this.shareLink = shareLink;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.artists = artists;
+        this.genres = genres;
     }
 
     private FeedItem(Parcel in){
+        id = in.readString();
         type = in.readString();
         title = in.readString();
         shortDescription = in.readString();
@@ -153,6 +188,9 @@ public class FeedItem implements Parcelable {
         shareLink = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
+      //  artists = in.readArrayList();
+      //  genres = in.readArrayList()
+
     }
 
     public static final Parcelable.Creator<FeedItem> CREATOR = new Parcelable.Creator<FeedItem>(){
