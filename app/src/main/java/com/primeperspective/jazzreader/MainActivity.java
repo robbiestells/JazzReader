@@ -21,12 +21,13 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView feedList;
 
     public void setFeedItems(ArrayList<FeedItem> items){
-        for (int i = 0; i < 10; i++){
-            feedItems.add(items.get(i));
-        }
-        feedAdapter = new FeedAdapter(this, feedItems);
-        feedList.setAdapter(feedAdapter);
-
+       if (items != null) {
+           for (int i = 0; i < 10; i++) {
+               feedItems.add(items.get(i));
+           }
+           feedAdapter = new FeedAdapter(this, feedItems);
+           feedList.setAdapter(feedAdapter);
+       }
     }
 
     @Override
