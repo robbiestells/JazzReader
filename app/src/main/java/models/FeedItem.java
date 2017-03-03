@@ -24,6 +24,11 @@ public class FeedItem implements Parcelable {
     String shareLink;
     String createdAt;
     String updatedAt;
+    String videoLink;
+    String article;
+    String eventDate;
+    String eventLocation;
+    String price;
     ArrayList<Artist> artists;
     ArrayList<Genre> genres;
 
@@ -48,6 +53,46 @@ public class FeedItem implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getVideoLink() {
+        return videoLink;
+    }
+
+    public void setVideoLink(String videoLink) {
+        this.videoLink = videoLink;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getArticle() {
+        return article;
+    }
+
+    public void setArticle(String article) {
+        this.article = article;
+    }
+
+    public String getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public String getEventLocation() {
+        return eventLocation;
+    }
+
+    public void setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
     }
 
     public String getType() {
@@ -149,6 +194,12 @@ public class FeedItem implements Parcelable {
         out.writeString(updatedAt);
         out.writeList(artists);
         out.writeList(genres);
+        out.writeString(videoLink);
+        out.writeString(article);
+        out.writeString(eventDate);
+        out.writeString(eventLocation);
+        out.writeString(price);
+
     }
 
     public FeedItem(){}
@@ -160,7 +211,8 @@ public class FeedItem implements Parcelable {
     }
 
     public FeedItem(String id, String type, String title, String shortDescription, String imageLink, String imageLinkRetina,
-                    String link, String releaseDate, String shareLink, String createdAt, String updatedAt, ArrayList<Artist> artists, ArrayList<Genre> genres){
+                    String link, String releaseDate, String shareLink, String createdAt, String updatedAt, ArrayList<Artist> artists, ArrayList<Genre> genres,
+                    String videoLink, String article, String eventDate, String eventLocation, String price){
         this.id = id;
         this.type = type;
         this.title = title;
@@ -174,6 +226,11 @@ public class FeedItem implements Parcelable {
         this.updatedAt = updatedAt;
         this.artists = artists;
         this.genres = genres;
+        this.videoLink = videoLink;
+        this.article = article;
+        this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
+        this.price = price;
     }
 
     private FeedItem(Parcel in){
@@ -188,6 +245,11 @@ public class FeedItem implements Parcelable {
         shareLink = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
+        videoLink = in.readString();
+        article = in.readString();
+        eventDate = in.readString();
+        eventLocation = in.readString();
+        price = in.readString();
       //  artists = in.readArrayList();
       //  genres = in.readArrayList()
 

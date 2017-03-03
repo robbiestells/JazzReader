@@ -1,6 +1,7 @@
 package adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -9,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.primeperspective.jazzreader.MainActivity;
 import com.primeperspective.jazzreader.R;
@@ -25,6 +28,7 @@ import models.FeedItem;
 public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int ITEM_TYPE_NORMAL = 0;
     private static final int ITEM_TYPE_RELEASE = 1;
+    private static final int ITEM_TYPE_VIDEO = 2;
 
     ArrayList<FeedItem> feedItems;
     Context context;
@@ -38,10 +42,11 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     public int getItemViewType(int position) {
         final FeedItem current = feedItems.get(position);
         if (current.getType().contains("release")) {
-            String type = current.getType();
-            Log.v("Type: ", type);
             return ITEM_TYPE_RELEASE;
-        } else {
+        } else if (current.getType().contains("video")) {
+            return ITEM_TYPE_VIDEO;
+        }
+        else {
             return ITEM_TYPE_NORMAL;
         }
 
@@ -58,6 +63,10 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             case ITEM_TYPE_RELEASE:
                 View releaseView = LayoutInflater.from(parent.getContext()).inflate(R.layout.second_post_type, parent, false);
                 holder = new ReleaseViewHolder(releaseView);
+                break;
+            case ITEM_TYPE_VIDEO:
+                View videoView = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_post_type, parent, false);
+                holder = new VideoViewHolder(videoView);
                 break;
             default:
                 View defaultView = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_item, parent, false);
@@ -79,6 +88,9 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
                 break;
             case ITEM_TYPE_RELEASE:
                 ((ReleaseViewHolder)holder).bindData(currentItem);
+                break;
+            case ITEM_TYPE_VIDEO:
+                ((VideoViewHolder)holder).bindData(currentItem);
                 break;
             default:
                 ((NormalViewHolder)holder).bindData(currentItem);
@@ -169,5 +181,33 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 //            MainActivity mainActivity = MainActivity.getInstance();
 //            mainActivity.OnEpisodeSelected(selected);
         }
+    }
+
+    public class VideoViewHolder extends RecyclerView.ViewHolder {
+        VideoView videoView;
+        CardView cardView;
+
+        public VideoViewHolder(View itemView) {
+            super(itemView);
+
+            //itemView.setOnClickListener(this);
+
+            //get views
+            videoView = (VideoView) itemView.findViewById(R.id.videoView);
+
+        }
+        public void bindData(FeedItem item){
+
+            MediaController mediaController= new MediaController(context);
+            mediaController.setAnchorView(videoView);
+            Uri uri=Uri.parse(item.getVideoLink());
+            videoView.setMediaController(mediaController);
+            videoView.setVideoURI(uri);
+            videoView.requestFocus();
+
+            videoView.start();
+
+        }
+
     }
 }

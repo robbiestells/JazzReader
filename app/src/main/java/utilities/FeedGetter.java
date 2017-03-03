@@ -147,6 +147,9 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                         String price = "";
                         String releaseDate = "";
                         String videoLink = "";
+                        String article = "";
+                        String eventDate = "";
+                        String eventLocation = "";
 
                         if (type.contains("release") || type.contains("event") || type.contains("link") || type.contains("news")){
                              shortDescription = currentArticle.getString("shortDescription");
@@ -166,11 +169,11 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                              videoLink = currentArticle.getString("videoLink");
                         }
                         if (type.contains("event") || type.contains("news")) {
-                            String article = currentArticle.getString("article");
+                             article = currentArticle.getString("article");
                         }
                         if (type.contains("event")) {
-                            String eventDate = currentArticle.getString("eventDate");
-                            String eventLocation = currentArticle.getString("eventLocation");
+                             eventDate = currentArticle.getString("eventDate");
+                             eventLocation = currentArticle.getString("eventLocation");
                         }
 
                         ArrayList<Artist> artists = new ArrayList<>();
@@ -208,7 +211,8 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
 
                         // Create a new FeedItem object
                         FeedItem feedItem = new FeedItem(id, type, title, shortDescription, imageLink, imageLinkRetina,
-                                link, releaseDate, shareLink, createdAt, updatedAt, artists, genres);
+                                link, releaseDate, shareLink, createdAt, updatedAt, artists, genres, videoLink, article,
+                                eventDate, eventLocation, price);
 
                         //add feed item to list
                         feedItems.add(feedItem);
