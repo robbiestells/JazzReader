@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     public void setFeedItems(ArrayList<FeedItem> items){
        if (items != null) {
-           for (int i = 0; i < 10; i++) {
+           for (int i = 0; i < 30; i++) {
                feedItems.add(items.get(i));
            }
            feedAdapter = new FeedAdapter(this, feedItems);

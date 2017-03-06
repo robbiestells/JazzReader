@@ -249,19 +249,19 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             itemView.setOnClickListener(this);
 
             //get views
-//            Title = (TextView) itemView.findViewById(R.id.postTitle);
-//            Type = (TextView) itemView.findViewById(R.id.postType);
-//            Date = (TextView) itemView.findViewById(R.id.postDate);
-//            Image = (ImageView) itemView.findViewById(R.id.postImage);
-//            cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
+            Title = (TextView) itemView.findViewById(R.id.postTitle);
+           // Type = (TextView) itemView.findViewById(R.id.postType);
+            Date = (TextView) itemView.findViewById(R.id.postDate);
+            Image = (ImageView) itemView.findViewById(R.id.postImage);
+            cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
         }
 
         public void bindData(FeedItem item) {
 
-//            Title.setText(item.getTitle());
-//            Date.setText(item.getCreatedAt());
-//            Type.setText(item.getType());
-//            Glide.with(context).load(item.getImageLink()).into(Image);
+            Title.setText(item.getTitle());
+            Date.setText(item.getEventDate());
+          //  Type.setText(item.getType());
+            Glide.with(context).load(item.getImageLink()).into(Image);
         }
 
         @Override
@@ -276,7 +276,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public class LinkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView Title, Date, Type;
-        ImageView Image;
+        //ImageView Image;
         CardView cardView;
 
         public LinkViewHolder(View itemView) {
@@ -285,18 +285,18 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             itemView.setOnClickListener(this);
 
             //get views
-//            Title = (TextView) itemView.findViewById(R.id.postTitle);
-//            Type = (TextView) itemView.findViewById(R.id.postType);
-//            Date = (TextView) itemView.findViewById(R.id.postDate);
-//            Image = (ImageView) itemView.findViewById(R.id.postImage);
-//            cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
+            Title = (TextView) itemView.findViewById(R.id.postTitle);
+            Type = (TextView) itemView.findViewById(R.id.postType);
+            Date = (TextView) itemView.findViewById(R.id.postDate);
+          //  Image = (ImageView) itemView.findViewById(R.id.postImage);
+            cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
         }
 
         public void bindData(FeedItem item) {
 
-//            Title.setText(item.getTitle());
-//            Date.setText(item.getCreatedAt());
-//            Type.setText(item.getType());
+            Title.setText(item.getTitle());
+            Date.setText(item.getCreatedAt());
+            Type.setText(item.getType());
 //            Glide.with(context).load(item.getImageLink()).into(Image);
         }
 
