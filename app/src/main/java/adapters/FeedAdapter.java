@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.primeperspective.jazzreader.MainActivity;
 import com.primeperspective.jazzreader.R;
 
@@ -47,8 +49,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             return ITEM_TYPE_RELEASE;
         } else if (current.getType().contains("video")) {
             return ITEM_TYPE_VIDEO;
-        }
-        else {
+        } else {
             return ITEM_TYPE_NORMAL;
         }
 
@@ -86,16 +87,16 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         switch (itemType) {
             case ITEM_TYPE_NORMAL:
-                ((NormalViewHolder)holder).bindData(currentItem);
+                ((NormalViewHolder) holder).bindData(currentItem);
                 break;
             case ITEM_TYPE_RELEASE:
-                ((ReleaseViewHolder)holder).bindData(currentItem);
+                ((ReleaseViewHolder) holder).bindData(currentItem);
                 break;
             case ITEM_TYPE_VIDEO:
-                ((VideoViewHolder)holder).bindData(currentItem);
+                ((VideoViewHolder) holder).bindData(currentItem);
                 break;
             default:
-                ((NormalViewHolder)holder).bindData(currentItem);
+                ((NormalViewHolder) holder).bindData(currentItem);
                 break;
             //set feed item data
 //        final FeedItem current = feedItems.get(position);
@@ -121,7 +122,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public class NormalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView Title, Date, Type;
-        //        ImageButton playButton;
+        ImageView Image;
         CardView cardView;
 
         public NormalViewHolder(View itemView) {
@@ -133,14 +134,16 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             Title = (TextView) itemView.findViewById(R.id.postTitle);
             Type = (TextView) itemView.findViewById(R.id.postType);
             Date = (TextView) itemView.findViewById(R.id.postDate);
-            //playButton = (ImageButton) itemView.findViewById(playEpisode);
+            Image = (ImageView) itemView.findViewById(R.id.postImage);
             cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
         }
-        public void bindData(FeedItem item){
 
-        Title.setText(item.getTitle());
-        Date.setText(item.getCreatedAt());
-        Type.setText(item.getType());
+        public void bindData(FeedItem item) {
+
+            Title.setText(item.getTitle());
+            Date.setText(item.getCreatedAt());
+            Type.setText(item.getType());
+            Glide.with(context).load(item.getImageLink()).into(Image);
         }
 
         @Override
@@ -169,7 +172,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             //playButton = (ImageButton) itemView.findViewById(playEpisode);
             cardView = (CardView) itemView.findViewById(R.id.releaseItemCard);
         }
-        public void bindData(FeedItem item){
+
+        public void bindData(FeedItem item) {
 
             Title.setText(item.getTitle());
 
@@ -200,7 +204,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
 
         }
-        public void bindData(FeedItem item){
+
+        public void bindData(FeedItem item) {
 
 //            MediaController mediaController= new MediaController(context);
 //            mediaController.setAnchorView(videoView);
@@ -210,9 +215,9 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 //            videoView.requestFocus();
 //
 //            videoView.start();
-          //  videoView.getSettings().setJavaScriptEnabled(true);
-          //  videoView.setWebChromeClient(new WebChromeClient(){});
-          //  videoView.loadUrl(item.getVideoLink());
+            //  videoView.getSettings().setJavaScriptEnabled(true);
+            //  videoView.setWebChromeClient(new WebChromeClient(){});
+            //  videoView.loadUrl(item.getVideoLink());
             videoTitle.setText(item.getTitle());
 
         }
