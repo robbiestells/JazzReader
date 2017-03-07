@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.primeperspective.jazzreader.MainActivity;
 import com.primeperspective.jazzreader.R;
 
 import java.util.ArrayList;
@@ -176,10 +177,10 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
         @Override
         public void onClick(View view) {
             //get episode that was clicked on and pass to main activity
-//            FeedItem selected = feedItems.get(getPosition());
-//
-//            MainActivity mainActivity = MainActivity.getInstance();
-//            mainActivity.OnEpisodeSelected(selected);
+            FeedItem selected = feedItems.get(getPosition());
+
+            MainActivity mainActivity = MainActivity.getInstance();
+            mainActivity.goToDetail(selected);
         }
     }
 

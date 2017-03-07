@@ -1,6 +1,7 @@
 package com.primeperspective.jazzreader;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private  ArrayList<FeedItem> feedItems = new ArrayList<>();
     private FeedAdapter feedAdapter;
     RecyclerView feedList;
+    private static MainActivity sMainActivty;
+
+    public static MainActivity getInstance() {
+        return sMainActivty;
+    }
 
     public void setFeedItems(ArrayList<FeedItem> items){
        if (items != null) {
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sMainActivty = this;
 
         //set up hamburger
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,4 +109,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public void goToDetail(FeedItem item){
+        Intent intent = new Intent(sMainActivty, Details.class);
+        intent.putExtra("item", item);
+        startActivity(intent);
+    }
+
 }
