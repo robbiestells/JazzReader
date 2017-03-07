@@ -172,6 +172,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             Type.setText(item.getType());
             Artists.setText(artistList.substring(0, artistList.length() - 2));
             Glide.with(context).load(item.getImageLink()).into(Image);
+
         }
 
         @Override
@@ -180,7 +181,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             FeedItem selected = feedItems.get(getPosition());
 
             MainActivity mainActivity = MainActivity.getInstance();
-            mainActivity.goToDetail(selected);
+            mainActivity.goToDetail(selected, Image);
+            Image.setTransitionName("transition" + selected.getId());
         }
     }
 
