@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import adapters.FeedAdapter;
 import models.FeedItem;
@@ -102,6 +103,31 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         if (id == R.id.nav_home) {
             // Handle the camera action
+        } else if (id == R.id.nav_videos) {
+
+            ArrayList<FeedItem> videoItems = new ArrayList<>();
+            for (int i = 0; i < feedItems.size(); i++) {
+                if (feedItems.get(i).getType() == "video") {
+                    videoItems.add(feedItems.get(i));
+                }
+            }
+
+            Intent intent = new Intent(this, SubFeed.class);
+            intent.putParcelableArrayListExtra("feedList", feedItems);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_news) {
+
+        } else if (id == R.id.nav_events) {
+
+        } else if (id == R.id.nav_links) {
+
+        } else if (id == R.id.nav_artists) {
+
+        } else if (id == R.id.nav_genres) {
+
+        } else if (id == R.id.nav_favorites) {
+
         } else if (id == R.id.nav_channels) {
 
         } else if (id == R.id.nav_about_us) {

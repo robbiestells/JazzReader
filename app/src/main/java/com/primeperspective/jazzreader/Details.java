@@ -2,9 +2,11 @@ package com.primeperspective.jazzreader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.detail_news);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         feedItem = (FeedItem) intent.getParcelableExtra("item");
@@ -42,4 +45,5 @@ public class Details extends AppCompatActivity {
         Glide.with(this).load(feedItem.getImageLink()).into(feedImage);
 
     }
+
 }
