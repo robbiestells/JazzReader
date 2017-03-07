@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,6 +17,7 @@ import com.primeperspective.jazzreader.R;
 
 import java.util.ArrayList;
 
+import models.Artist;
 import models.FeedItem;
 
 /**
@@ -135,9 +137,10 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title, Date, Type;
+        TextView Title, Date, Type, Artists;
         ImageView Image;
         CardView cardView;
+        ArrayList<Artist> artists;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
@@ -150,13 +153,23 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             Date = (TextView) itemView.findViewById(R.id.postDate);
             Image = (ImageView) itemView.findViewById(R.id.postImage);
             cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
+            Artists = (TextView) itemView.findViewById(R.id.postArtists);
+
         }
 
         public void bindData(FeedItem item) {
 
+            //get artists
+            artists = item.getArtists();
+            String artistList = "";
+            for (Artist artist:artists) {
+                artistList = artistList + artist.getArtistName() + ", ";
+            }
+
             Title.setText(item.getTitle());
             Date.setText(item.getCreatedAt());
             Type.setText(item.getType());
+            Artists.setText(artistList.substring(0, artistList.length() - 2));
             Glide.with(context).load(item.getImageLink()).into(Image);
         }
 
@@ -171,7 +184,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class ReleaseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title;
+        TextView Title, Type;
         //        ImageButton playButton;
         CardView cardView;
 
@@ -182,7 +195,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             //get views
             Title = (TextView) itemView.findViewById(R.id.postTitle);
-
+            Type = (TextView) itemView.findViewById(R.id.postType);
             //playButton = (ImageButton) itemView.findViewById(playEpisode);
             cardView = (CardView) itemView.findViewById(R.id.releaseItemCard);
         }
@@ -190,7 +203,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
         public void bindData(FeedItem item) {
 
             Title.setText(item.getTitle());
-
+            Type.setText(item.getType());
         }
 
         @Override
