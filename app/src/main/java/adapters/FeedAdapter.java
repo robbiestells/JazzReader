@@ -239,7 +239,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title, Date, Type;
+        TextView Title, EventDate, Type;
         ImageView Image;
         CardView cardView;
 
@@ -251,7 +251,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             //get views
             Title = (TextView) itemView.findViewById(R.id.postTitle);
            // Type = (TextView) itemView.findViewById(R.id.postType);
-            Date = (TextView) itemView.findViewById(R.id.postDate);
+            EventDate = (TextView) itemView.findViewById(R.id.eventDate);
             Image = (ImageView) itemView.findViewById(R.id.postImage);
             cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
         }
@@ -259,7 +259,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
         public void bindData(FeedItem item) {
 
             Title.setText(item.getTitle());
-            Date.setText(item.getEventDate());
+            EventDate.setText(item.getEventDate());
           //  Type.setText(item.getType());
             Glide.with(context).load(item.getImageLink()).into(Image);
         }

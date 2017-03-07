@@ -33,16 +33,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="3"/>
-
-            <TextView
-                android:id="@+id/postDate"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/postType"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/newspaper"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/postType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/postDate"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:layout_gravity="end|center_vertical" />
+            </LinearLayout>
+
         </LinearLayout>
 
 
