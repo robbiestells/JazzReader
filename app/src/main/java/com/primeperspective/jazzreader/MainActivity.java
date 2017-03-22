@@ -43,18 +43,28 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private FeedAdapter feedAdapter;
     RecyclerView feedList;
     private static MainActivity sMainActivty;
-
+    private static int cardWidth;
 
     public static MainActivity getInstance() {
         return sMainActivty;
     }
 
+    public static int getCardWidth() {
+        return cardWidth;
+    }
+
+    public static void setCardWidth(int cardWidth) {
+        MainActivity.cardWidth = cardWidth;
+    }
+
     public void setFeedItems(ArrayList<FeedItem> items){
-       if (items != null) {
+        ArrayList<FeedItem> displayItems = new ArrayList<>();
+        if (items != null) {
            for (int i = 0; i < 30; i++) {
-               feedItems.add(items.get(i));
+               displayItems.add(items.get(i));
            }
-           feedAdapter = new FeedAdapter(this, feedItems);
+
+           feedAdapter = new FeedAdapter(this, displayItems);
            feedList.setAdapter(feedAdapter);
 
 //        feedList.getLayoutManager().isSmoothScrolling();
@@ -68,6 +78,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         sMainActivty = this;
+        setCardWidth(0);
 
         //set up hamburger
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -88,13 +99,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
        if (lastJSON != "first"){
            feedItems = extractFeatureFromJson(lastJSON);
            setFeedItems(feedItems);
+           //feedItems.clear();
        }
 
-
         //get new feed items
-
-     //   FeedGetter getFeed = new FeedGetter(this);
-     //   getFeed.execute();
+       FeedGetter getFeed = new FeedGetter(this);
+      getFeed.execute();
 
     }
 

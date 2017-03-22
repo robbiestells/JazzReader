@@ -1,12 +1,16 @@
 package adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -225,6 +229,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
         ImageView videoImage;
         CardView cardView;
 
+        int cardWidth;
+
         public VideoViewHolder(View itemView) {
             super(itemView);
 
@@ -234,21 +240,96 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             videoView = (WebView) itemView.findViewById(R.id.videoView);
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
             videoImage = (ImageView) itemView.findViewById(R.id.videoImage);
-
+            cardView = (CardView) itemView.findViewById(R.id.videoItemCard);
         }
 
         public void bindData(final FeedItem item) {
 
-            String url = item.getVideoLink();
+//            //cardWidth = cardView.getWidth();
+//            //viewHeight = view.getHeight();
+//            String videoId = "";
+//
+//            String url = item.getVideoLink();
+//
+//            if (url.contains("youtube")) {
+//                videoId = url.split("=")[1];
+//                Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+//            } else {
+//
+//                //TODO get vimeo preview image
+//            }
+//
+//            videoTitle.setText(item.getTitle());
+//            videoTitle.setVisibility(View.VISIBLE);
+//            videoImage.setVisibility(View.VISIBLE);
+//
+//
+//            //TODO autoplay not working
+//            String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
+//
+//            // https://www.youtube.com/watch?v=3WirydZ4I2Y
+//
+//            float test = 200;
+//
+//            String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+//
+//            videoView.getSettings().setJavaScriptEnabled(true);
+//            videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
 
-            if (url.contains("youtube")) {
-                String videoId = url.split("=")[1];
-                Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
-            } else {
+            ViewTreeObserver viewTreeObserver = cardView.getViewTreeObserver();
+            if (viewTreeObserver.isAlive()) {
+                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        cardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        cardWidth = cardView.getWidth();
+                        //viewHeight = view.getHeight();
 
+                        String url = item.getVideoLink();
+
+                        if (url.contains("youtube")) {
+                            String videoId = url.split("=")[1];
+                            Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+                        } else {
+
+                            //TODO get vimeo preview image
+                        }
+
+                        videoTitle.setText(item.getTitle());
+                        videoImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                videoImage.setVisibility(View.GONE);
+                                videoTitle.setVisibility(View.GONE);
+
+                                String videoId = "";
+                                String url = item.getVideoLink();
+
+                                if (url.contains("youtube")) {
+                                    videoId = url.split("=")[1];
+                                    //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+                                } else {
+
+                                }
+
+                                //TODO autoplay not working
+                                String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
+
+                                // https://www.youtube.com/watch?v=3WirydZ4I2Y
+
+                                float test = cardWidth / context.getResources().getDisplayMetrics().density;
+
+                                String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+
+                                videoView.getSettings().setJavaScriptEnabled(true);
+                                videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+                            }
+                        });
+
+                    }
+                });
             }
 
-            videoTitle.setText(item.getTitle());
             videoImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -260,7 +341,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                     if (url.contains("youtube")) {
                         videoId = url.split("=")[1];
-                      //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+                        //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
                     } else {
 
                     }
@@ -269,15 +350,19 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
                     String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
 
                     // https://www.youtube.com/watch?v=3WirydZ4I2Y
-                    String iframe = " <iframe width=\"300\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+
+                    float test = 200;
+
+                    String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
 
                     videoView.getSettings().setJavaScriptEnabled(true);
                     videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
                 }
             });
 
-        }
 
+
+        }
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
