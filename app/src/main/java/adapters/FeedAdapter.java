@@ -234,29 +234,47 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             videoView = (WebView) itemView.findViewById(R.id.videoView);
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
             videoImage = (ImageView) itemView.findViewById(R.id.videoImage);
+
         }
 
-        public void bindData(FeedItem item) {
+        public void bindData(final FeedItem item) {
 
-            String videoId = "";
             String url = item.getVideoLink();
 
             if (url.contains("youtube")) {
-                videoId = url.split("=")[1];
+                String videoId = url.split("=")[1];
                 Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
             } else {
 
             }
 
-            String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "\"";
-
-            // https://www.youtube.com/watch?v=3WirydZ4I2Y
-            String iframe = " <iframe width=\"300\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
-
-            videoView.getSettings().setJavaScriptEnabled(true);
-            videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
-
             videoTitle.setText(item.getTitle());
+            videoImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoImage.setVisibility(View.GONE);
+                    videoTitle.setVisibility(View.GONE);
+
+                    String videoId = "";
+                    String url = item.getVideoLink();
+
+                    if (url.contains("youtube")) {
+                        videoId = url.split("=")[1];
+                      //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+                    } else {
+
+                    }
+
+                    //TODO autoplay not working
+                    String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
+
+                    // https://www.youtube.com/watch?v=3WirydZ4I2Y
+                    String iframe = " <iframe width=\"300\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+
+                    videoView.getSettings().setJavaScriptEnabled(true);
+                    videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+                }
+            });
 
         }
 

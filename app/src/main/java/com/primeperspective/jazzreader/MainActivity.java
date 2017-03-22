@@ -87,24 +87,14 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         String lastJSON = sharedPref.getString("lastJSON", "first");
        if (lastJSON != "first"){
            feedItems = extractFeatureFromJson(lastJSON);
-
            setFeedItems(feedItems);
        }
 
 
         //get new feed items
 
-        FeedGetter getFeed = new FeedGetter(this);
-        getFeed.execute();
-
-        //Check for any issues with Youtube
-//        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
-//
-//        if (result != YouTubeInitializationResult.SUCCESS) {
-//            //If there are any issues we can show an error dialog.
-//            result.getErrorDialog(this, 0).show();
-//        }
-
+     //   FeedGetter getFeed = new FeedGetter(this);
+     //   getFeed.execute();
 
     }
 
