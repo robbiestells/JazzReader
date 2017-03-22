@@ -261,7 +261,9 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             videoTitle.setText(item.getTitle());
             videoTitle.setVisibility(View.VISIBLE);
+            //TODO decide whether or not to keep preview image
             videoImage.setVisibility(View.VISIBLE);
+            //videoImage.setVisibility(View.GONE);
 
 
             //TODO autoplay not working
@@ -269,7 +271,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             // https://www.youtube.com/watch?v=3WirydZ4I2Y
 
-            float test = 200;
+            float test = 300;
 
             String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
 
