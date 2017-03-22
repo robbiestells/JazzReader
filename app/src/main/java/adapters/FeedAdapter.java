@@ -163,7 +163,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             //get artists
             artists = item.getArtists();
             String artistList = "";
-            for (Artist artist:artists) {
+            for (Artist artist : artists) {
                 artistList = artistList + artist.getArtistName() + ", ";
             }
 
@@ -237,17 +237,24 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         public void bindData(FeedItem item) {
 
-//            MediaController mediaController= new MediaController(context);
-//            mediaController.setAnchorView(videoView);
-//            Uri uri=Uri.parse(item.getVideoLink());
-//            videoView.setMediaController(mediaController);
-//            videoView.setVideoURI(uri);
-//            videoView.requestFocus();
+            String videoId = "";
+            String url = item.getVideoLink();
+
+            if (url.contains("youtube")) {
+                videoId = url.split("=")[1];
+            } else {
+
+            }
+
+            String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "\"";
+
 //
-//            videoView.start();
-            //  videoView.getSettings().setJavaScriptEnabled(true);
-            //  videoView.setWebChromeClient(new WebChromeClient(){});
-            //  videoView.loadUrl(item.getVideoLink());
+            // https://www.youtube.com/watch?v=3WirydZ4I2Y
+            String iframe = " <iframe width=\"300\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+
+            videoView.getSettings().setJavaScriptEnabled(true);
+            videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+
             videoTitle.setText(item.getTitle());
 
         }
@@ -266,7 +273,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             //get views
             Title = (TextView) itemView.findViewById(R.id.postTitle);
-           // Type = (TextView) itemView.findViewById(R.id.postType);
+            // Type = (TextView) itemView.findViewById(R.id.postType);
             EventDate = (TextView) itemView.findViewById(R.id.eventDate);
             Image = (ImageView) itemView.findViewById(R.id.postImage);
             cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
@@ -276,7 +283,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             Title.setText(item.getTitle());
             EventDate.setText(item.getEventDate());
-          //  Type.setText(item.getType());
+            //  Type.setText(item.getType());
             Glide.with(context).load(item.getImageLink()).into(Image);
         }
 
@@ -304,7 +311,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             Title = (TextView) itemView.findViewById(R.id.postTitle);
             Type = (TextView) itemView.findViewById(R.id.postType);
             Date = (TextView) itemView.findViewById(R.id.postDate);
-          //  Image = (ImageView) itemView.findViewById(R.id.postImage);
+            //  Image = (ImageView) itemView.findViewById(R.id.postImage);
             cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
         }
 
