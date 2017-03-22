@@ -245,90 +245,38 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         public void bindData(final FeedItem item) {
 
-//            //cardWidth = cardView.getWidth();
-//            //viewHeight = view.getHeight();
-//            String videoId = "";
-//
-//            String url = item.getVideoLink();
-//
-//            if (url.contains("youtube")) {
-//                videoId = url.split("=")[1];
-//                Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
-//            } else {
-//
-//                //TODO get vimeo preview image
-//            }
-//
-//            videoTitle.setText(item.getTitle());
-//            videoTitle.setVisibility(View.VISIBLE);
-//            videoImage.setVisibility(View.VISIBLE);
-//
-//
-//            //TODO autoplay not working
-//            String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
-//
-//            // https://www.youtube.com/watch?v=3WirydZ4I2Y
-//
-//            float test = 200;
-//
-//            String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
-//
-//            videoView.getSettings().setJavaScriptEnabled(true);
-//            videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+            //cardWidth = cardView.getWidth();
+            //viewHeight = view.getHeight();
+            String videoId = "";
 
-            ViewTreeObserver viewTreeObserver = cardView.getViewTreeObserver();
-            if (viewTreeObserver.isAlive()) {
-                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        cardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        cardWidth = cardView.getWidth();
-                        //viewHeight = view.getHeight();
+            String url = item.getVideoLink();
 
-                        String url = item.getVideoLink();
+            if (url.contains("youtube")) {
+                videoId = url.split("=")[1];
+                Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+            } else {
 
-                        if (url.contains("youtube")) {
-                            String videoId = url.split("=")[1];
-                            Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
-                        } else {
-
-                            //TODO get vimeo preview image
-                        }
-
-                        videoTitle.setText(item.getTitle());
-                        videoImage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                videoImage.setVisibility(View.GONE);
-                                videoTitle.setVisibility(View.GONE);
-
-                                String videoId = "";
-                                String url = item.getVideoLink();
-
-                                if (url.contains("youtube")) {
-                                    videoId = url.split("=")[1];
-                                    //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
-                                } else {
-
-                                }
-
-                                //TODO autoplay not working
-                                String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
-
-                                // https://www.youtube.com/watch?v=3WirydZ4I2Y
-
-                                float test = cardWidth / context.getResources().getDisplayMetrics().density;
-
-                                String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
-
-                                videoView.getSettings().setJavaScriptEnabled(true);
-                                videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
-                            }
-                        });
-
-                    }
-                });
+                //TODO get vimeo preview image
             }
+
+            videoTitle.setText(item.getTitle());
+            videoTitle.setVisibility(View.VISIBLE);
+            videoImage.setVisibility(View.VISIBLE);
+
+
+            //TODO autoplay not working
+            String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
+
+            // https://www.youtube.com/watch?v=3WirydZ4I2Y
+
+            float test = 200;
+
+            String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+
+            videoView.getSettings().setJavaScriptEnabled(true);
+            videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+
+
 
             videoImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -336,31 +284,83 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
                     videoImage.setVisibility(View.GONE);
                     videoTitle.setVisibility(View.GONE);
 
-                    String videoId = "";
-                    String url = item.getVideoLink();
-
-                    if (url.contains("youtube")) {
-                        videoId = url.split("=")[1];
-                        //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
-                    } else {
-
-                    }
-
-                    //TODO autoplay not working
-                    String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
-
-                    // https://www.youtube.com/watch?v=3WirydZ4I2Y
-
-                    float test = 200;
-
-                    String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
-
-                    videoView.getSettings().setJavaScriptEnabled(true);
-                    videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+//                    String videoId = "";
+//                    String url = item.getVideoLink();
+//
+//                    if (url.contains("youtube")) {
+//                        videoId = url.split("=")[1];
+//                        //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+//                    } else {
+//
+//                    }
+//
+//                    //TODO autoplay not working
+//                    String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
+//
+//                    // https://www.youtube.com/watch?v=3WirydZ4I2Y
+//
+//                    float test = 200;
+//
+//                    String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+//
+//                    videoView.getSettings().setJavaScriptEnabled(true);
+//                    videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
                 }
             });
 
-
+//            ViewTreeObserver viewTreeObserver = cardView.getViewTreeObserver();
+//            if (viewTreeObserver.isAlive()) {
+//                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        cardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                        cardWidth = cardView.getWidth();
+//                        //viewHeight = view.getHeight();
+//
+//                        String url = item.getVideoLink();
+//
+//                        if (url.contains("youtube")) {
+//                            String videoId = url.split("=")[1];
+//                            Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+//                        } else {
+//
+//                            //TODO get vimeo preview image
+//                        }
+//
+//                        videoTitle.setText(item.getTitle());
+//                        videoImage.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                videoImage.setVisibility(View.GONE);
+//                                videoTitle.setVisibility(View.GONE);
+//
+//                                String videoId = "";
+//                                String url = item.getVideoLink();
+//
+//                                if (url.contains("youtube")) {
+//                                    videoId = url.split("=")[1];
+//                                    //  Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
+//                                } else {
+//
+//                                }
+//
+//                                //TODO autoplay not working
+//                                String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
+//
+//                                // https://www.youtube.com/watch?v=3WirydZ4I2Y
+//
+//                                float test = cardWidth / context.getResources().getDisplayMetrics().density;
+//
+//                                String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
+//
+//                                videoView.getSettings().setJavaScriptEnabled(true);
+//                                videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
+//                            }
+//                        });
+//
+//                    }
+//                });
+//            }
 
         }
     }
