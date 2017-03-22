@@ -222,6 +222,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     public class VideoViewHolder extends RecyclerView.ViewHolder {
         TextView videoTitle;
         WebView videoView;
+        ImageView videoImage;
         CardView cardView;
 
         public VideoViewHolder(View itemView) {
@@ -232,7 +233,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             //get views
             videoView = (WebView) itemView.findViewById(R.id.videoView);
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
-
+            videoImage = (ImageView) itemView.findViewById(R.id.videoImage);
         }
 
         public void bindData(FeedItem item) {
@@ -242,13 +243,13 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             if (url.contains("youtube")) {
                 videoId = url.split("=")[1];
+                Glide.with(context).load("https://img.youtube.com/vi/" + videoId + "/0.jpg").into(videoImage);
             } else {
 
             }
 
             String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "\"";
 
-//
             // https://www.youtube.com/watch?v=3WirydZ4I2Y
             String iframe = " <iframe width=\"300\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
 

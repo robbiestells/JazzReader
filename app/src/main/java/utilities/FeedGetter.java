@@ -3,6 +3,7 @@ package utilities;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.primeperspective.jazzreader.MainActivity;
 import com.primeperspective.jazzreader.R;
@@ -46,6 +48,7 @@ import models.Genre;
 
 import static android.R.attr.rating;
 import static android.R.attr.type;
+import static android.provider.Settings.Global.getString;
 
 /**
  * Created by rob on 3/2/17.
@@ -70,15 +73,17 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
 
         //TODO check for internet connection
 
+        Toast toast=Toast.makeText(activity.getBaseContext(),"Getting Feed",Toast.LENGTH_SHORT);
+        toast.show();
         //display loading screen
-        progressDialog = new ProgressDialog(activity);
-        //Set the progress dialog to display spinner
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        //Set the dialog title to 'Looking...'
-        progressDialog.setTitle("Getting episodes");
-        //This dialog can't be canceled by pressing the back key
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+//        progressDialog = new ProgressDialog(activity);
+//        //Set the progress dialog to display spinner
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        //Set the dialog title to 'Looking...'
+//        progressDialog.setTitle("Getting Feed");
+//        //This dialog can't be canceled by pressing the back key
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
     }
 
     @Override
@@ -87,7 +92,9 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
         activity.setFeedItems(feedItems);
         //feedAdapter = new FeedAdapter(context, feedItems);
         //dismiss loading dialog
-        progressDialog.dismiss();
+     //   progressDialog.dismiss();
+        Toast toast=Toast.makeText(activity.getBaseContext(),"Feed updated",Toast.LENGTH_SHORT);
+        toast.show();
 
     }
 
@@ -99,6 +106,13 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
         String jsonResponse;
         try {
             jsonResponse = makeHttpRequest(url);
+
+            //save json to settings
+            SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("lastJSON", jsonResponse);
+            editor.commit();
+
             feedItems = extractFeatureFromJson(jsonResponse);
         } catch (IOException e) {
             Log.e("ASYNC: ", "Problem making the HTTP request.", e);
