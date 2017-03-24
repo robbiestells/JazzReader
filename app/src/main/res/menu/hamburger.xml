@@ -18,6 +18,10 @@
             android:icon="@mipmap/ic_launcher"
             android:title="Events" />
         <item
+            android:id="@+id/release"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Releases" />
+        <item
             android:id="@+id/nav_links"
             android:icon="@mipmap/ic_launcher"
             android:title="Links" />

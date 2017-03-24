@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,6 +35,7 @@ import models.Genre;
 import utilities.FeedGetter;
 
 import static android.R.attr.defaultValue;
+import static android.R.attr.id;
 import static java.security.AccessController.getContext;
 import static utilities.FeedGetter.extractFeatureFromJson;
 
@@ -75,8 +77,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         sMainActivty = this;
         setCardWidth(0);
 
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         //get new feed items
        FeedGetter getFeed = new FeedGetter(this);
-      getFeed.execute();
+       getFeed.execute();
 
     }
 
@@ -124,26 +128,33 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_videos) {
-
-            ArrayList<FeedItem> videoItems = new ArrayList<>();
-            for (int i = 0; i < feedItems.size(); i++) {
-                if (feedItems.get(i).getType() == "video") {
-                    videoItems.add(feedItems.get(i));
-                }
-            }
-
             Intent intent = new Intent(this, SubFeed.class);
-            intent.putParcelableArrayListExtra("feedList", feedItems);
+            intent.putExtra("type", "video");
             startActivity(intent);
 
         } else if (id == R.id.nav_news) {
+            Intent intent = new Intent(this, SubFeed.class);
+            intent.putExtra("type", "news");
+            startActivity(intent);
 
         } else if (id == R.id.nav_events) {
+            Intent intent = new Intent(this, SubFeed.class);
+            intent.putExtra("type", "event");
+            startActivity(intent);
 
         } else if (id == R.id.nav_links) {
+            Intent intent = new Intent(this, SubFeed.class);
+            intent.putExtra("type", "links");
+            startActivity(intent);
+
+        }  else if (id == R.id.release) {
+        Intent intent = new Intent(this, SubFeed.class);
+        intent.putExtra("type", "release");
+        startActivity(intent);
 
         } else if (id == R.id.nav_artists) {
 
@@ -156,6 +167,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         } else if (id == R.id.nav_about_us) {
 
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
