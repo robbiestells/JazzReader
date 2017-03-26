@@ -39,6 +39,7 @@ import models.Artist;
 import models.FeedItem;
 import models.Genre;
 import utilities.FeedGetter;
+import utilities.Utilities;
 
 import static android.R.attr.defaultValue;
 import static android.R.attr.id;
@@ -66,22 +67,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     }
 
     public void setFeedItems(ArrayList<FeedItem> items){
-        ArrayList<FeedItem> displayItems = new ArrayList<>();
         if (items != null) {
-//           for (int i = 0; i < 30; i++) {
-//               displayItems.add(items.get(i));
-//           }
-
-//           feedAdapter = new FeedAdapter(this, displayItems);
-
-            //working code
-           // feedAdapter = new FeedAdapter(this, items);
-           //feedList.setAdapter(feedAdapter);
-
-//        feedList.getLayoutManager().isSmoothScrolling();
-
-            displayItems = getSavedFeed();
-            feedAdapter = new FeedAdapter(this, displayItems);
+            feedAdapter = new FeedAdapter(this, items);
             feedList.setAdapter(feedAdapter);
        }
     }
@@ -111,12 +98,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         feedList.setLayoutManager(new LinearLayoutManager(this));
 
         //TODO get and load last feed
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        String lastJSON = sharedPref.getString("lastJSON", "first");
-       if (lastJSON != "first"){
-           feedItems = extractFeatureFromJson(lastJSON);
-           setFeedItems(feedItems);
-           //feedItems.clear();
+        ArrayList<FeedItem> loadFeed = new ArrayList<>();
+        loadFeed = Utilities.getSavedFeed(this);
+        if (loadFeed !=null){
+           setFeedItems(loadFeed);
        }
 
         //get new feed items
@@ -192,7 +177,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         intent.putExtra("item", item);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "transition" + item.getId() );
         intent.putExtra("transition", "transition" + item.getId());
-       ActivityCompat.startActivity(this, intent, options.toBundle());
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     public static ArrayList<FeedItem> extractFeatureFromJson(String channelJson) {
