@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import data.FeedContract.ArtistEntry;
+import data.FeedContract.FeedArtistEntry;
 import data.FeedContract.FeedEntry;
+import data.FeedContract.FeedGenreEntry;
 import data.FeedContract.GenreEntry;
 
 /**
@@ -59,9 +61,23 @@ public class FeedDbHelper extends SQLiteOpenHelper {
                 GenreEntry.COLUMN_GENRE_NAME + " TEXT, " +
                 GenreEntry.COLUMN_GENRE_TOPIC + " TEXT);";
 
+        final String SQL_CREATE_FEED_ARTIST_TABLE = "CREATE TABLE " + FeedArtistEntry.TABLE_NAME + " (" +
+                FeedArtistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                FeedArtistEntry.COLUMN_FEED_ARTIST_ID + " TEXT, " +
+                FeedArtistEntry.COLUMN_FEED_ID + " TEXT, " +
+                FeedArtistEntry.COLUMN_ARTIST_ID + " TEXT);";
+
+        final String SQL_CREATE_FEED_GENRE_TABLE = "CREATE TABLE " + FeedGenreEntry.TABLE_NAME + " (" +
+                FeedGenreEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                FeedGenreEntry.COLUMN_FEED_GENRE_ID + " TEXT, " +
+                FeedGenreEntry.COLUMN_FEED_ID + " TEXT, " +
+                FeedGenreEntry.COLUMN_GENRE_ID + " TEXT);";
+
         sqLiteDatabase.execSQL(SQL_CREATE_FEED_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ARTIST_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_GENRE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_FEED_ARTIST_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_FEED_GENRE_TABLE);
     }
 
     @Override
@@ -69,6 +85,8 @@ public class FeedDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ArtistEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + GenreEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FeedArtistEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FeedGenreEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

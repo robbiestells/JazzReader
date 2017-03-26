@@ -44,6 +44,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import adapters.FeedAdapter;
 import data.FeedContract;
+import data.FeedContract.FeedGenreEntry;
 import data.FeedDbHelper;
 import models.Artist;
 import models.FeedItem;
@@ -105,6 +106,7 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
     @Override
     protected ArrayList<FeedItem> doInBackground(Void... params) {
 
+        //v2 http://trrc.sliday.com/api/v2/data.json
         String feed = "http://trrc.sliday.com/api/data.json";
         URL url = createUrl(feed);
         String jsonResponse;
@@ -210,6 +212,8 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                             Artist artist = new Artist(artistId, artistName, topicName, artistImage, artistImageRetina, artistBio);
                             artists.add(artist);
 
+                            saveFeedArtist(artists, id);
+
                         }
 
                         ArrayList<Genre> genres = new ArrayList<>();
@@ -224,6 +228,8 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
 
                             Genre genre = new Genre(genreId, genreName, topicName);
                             genres.add(genre);
+
+                            saveFeedGenre(genres, id);
 
                         }
 
@@ -406,6 +412,61 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                 //insert a new entry with the data above
                 long newRowId = db.insert(FeedContract.GenreEntry.TABLE_NAME, null, values);
                 Log.v("Insert Genre item", "New row ID: " + newRowId);
+            }
+            cursor.close();
+        }
+
+        db.close();
+    }
+
+
+    private static void saveFeedArtist(ArrayList<Artist> artists, String id) {
+        MainActivity mainActivity = MainActivity.getInstance();
+        FeedDbHelper mDbHelper = new FeedDbHelper(mainActivity.getApplicationContext());
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        String query = "SELECT * FROM " + FeedContract.FeedArtistEntry.TABLE_NAME+ " WHERE " + FeedContract.FeedArtistEntry.COLUMN_FEED_ARTIST_ID
+                + " =?";
+        for (Artist artist : artists) {
+            Cursor cursor = db.rawQuery(query, new String[]{id + artist.getId()});
+
+            if (cursor.getCount() <= 0) {
+                //get values
+                ContentValues values = new ContentValues();
+                values.put(FeedContract.FeedArtistEntry.COLUMN_FEED_ARTIST_ID, id + artist.getId());
+                values.put(FeedContract.FeedArtistEntry.COLUMN_FEED_ID, id);
+                values.put(FeedContract.FeedArtistEntry.COLUMN_ARTIST_ID, artist.getId());
+
+                //insert a new entry with the data above
+                long newRowId = db.insert(FeedContract.FeedArtistEntry.TABLE_NAME, null, values);
+                Log.v("Insert FeedArtist item", "New row ID: " + newRowId);
+            }
+            cursor.close();
+        }
+
+        db.close();
+    }
+
+    private static void saveFeedGenre(ArrayList<Genre> genres, String id) {
+        MainActivity mainActivity = MainActivity.getInstance();
+        FeedDbHelper mDbHelper = new FeedDbHelper(mainActivity.getApplicationContext());
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        String query = "SELECT * FROM " + FeedGenreEntry.TABLE_NAME+ " WHERE " + FeedGenreEntry.COLUMN_FEED_GENRE_ID
+                + " =?";
+        for (Genre genre : genres) {
+            Cursor cursor = db.rawQuery(query, new String[]{id + genre.getId()});
+
+            if (cursor.getCount() <= 0) {
+                //get values
+                ContentValues values = new ContentValues();
+                values.put(FeedGenreEntry.COLUMN_FEED_GENRE_ID, id + genre.getId());
+                values.put(FeedGenreEntry.COLUMN_FEED_ID, id );
+                values.put(FeedGenreEntry.COLUMN_GENRE_ID, genre.getId());
+
+                //insert a new entry with the data above
+                long newRowId = db.insert(FeedContract.FeedGenreEntry.TABLE_NAME, null, values);
+                Log.v("Insert FeedGenre item", "New row ID: " + newRowId);
             }
             cursor.close();
         }

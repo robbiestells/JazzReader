@@ -11,7 +11,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import data.FeedContract.ArtistEntry;
+import data.FeedContract.FeedArtistEntry;
 import data.FeedContract.FeedEntry;
+import data.FeedContract.FeedGenreEntry;
 import data.FeedContract.GenreEntry;
 
 import static android.R.attr.name;
@@ -31,6 +33,10 @@ public class FeedProvider extends ContentProvider {
     private static final int ARTIST_ID = 201;
     private static final int GENRE = 300;
     private static final int GENRE_ID = 301;
+    private static final int FEEDARTIST = 400;
+    private static final int FEEDARTIST_ID = 401;
+    private static final int FEEDGENRE = 500;
+    private static final int FEEDGENRE_ID = 501;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -41,7 +47,10 @@ public class FeedProvider extends ContentProvider {
         sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_ARTISTS + "/#", ARTIST_ID);
         sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_GENRES, GENRE);
         sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_GENRES + "/#", GENRE_ID);
-
+        sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_FEED_ARTIST, FEEDARTIST);
+        sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_FEED_ARTIST + "/#", FEEDARTIST_ID);
+        sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_FEED_GENRE, FEEDGENRE);
+        sUriMatcher.addURI(FeedContract.CONTENT_AUTHORITY, FeedContract.PATH_FEED_GENRE + "/#", FEEDGENRE_ID);
     }
 
     @Override
@@ -84,6 +93,22 @@ public class FeedProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(GenreEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
+            case FEEDARTIST:
+                cursor = database.query(FeedArtistEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case FEEDARTIST_ID:
+                selection = FeedArtistEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = database.query(FeedArtistEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case FEEDGENRE:
+                cursor = database.query(FeedGenreEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case FEEDGENRE_ID:
+                selection = FeedGenreEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = database.query(FeedGenreEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
@@ -111,6 +136,14 @@ public class FeedProvider extends ContentProvider {
                 return GenreEntry.CONTENT_LIST_TYPE;
             case GENRE_ID:
                 return GenreEntry.CONTENT_ITEM_TYPE;
+            case FEEDARTIST:
+                return FeedArtistEntry.CONTENT_LIST_TYPE;
+            case FEEDARTIST_ID:
+                return FeedArtistEntry.CONTENT_ITEM_TYPE;
+            case FEEDGENRE:
+                return FeedGenreEntry.CONTENT_LIST_TYPE;
+            case FEEDGENRE_ID:
+                return FeedGenreEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri + " with match " + match);
         }
@@ -127,6 +160,10 @@ public class FeedProvider extends ContentProvider {
                 return insertArtist(uri, contentValues);
             case GENRE:
                 return insertGenre(uri, contentValues);
+            case FEEDARTIST:
+                return insertFeedArtist(uri, contentValues);
+            case FEEDGENRE:
+                return insertFeedGenre(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -186,6 +223,50 @@ public class FeedProvider extends ContentProvider {
         SQLiteDatabase database = mHelper.getWritableDatabase();
 
         long tableId = database.insert(GenreEntry.TABLE_NAME, null, values);
+
+        if (tableId == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        //notify listeners that there has been a change
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return ContentUris.withAppendedId(uri, tableId);
+    }
+
+    private Uri insertFeedArtist(Uri uri, ContentValues values) {
+        //Check that episode title is not null
+        String id = values.getAsString(FeedArtistEntry.COLUMN_FEED_ARTIST_ID);
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid Genre id");
+        }
+
+        SQLiteDatabase database = mHelper.getWritableDatabase();
+
+        long tableId = database.insert(FeedArtistEntry.TABLE_NAME, null, values);
+
+        if (tableId == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        //notify listeners that there has been a change
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return ContentUris.withAppendedId(uri, tableId);
+    }
+
+    private Uri insertFeedGenre(Uri uri, ContentValues values) {
+        //Check that episode title is not null
+        String id = values.getAsString(FeedGenreEntry.COLUMN_FEED_GENRE_ID);
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid FeedGenre id");
+        }
+
+        SQLiteDatabase database = mHelper.getWritableDatabase();
+
+        long tableId = database.insert(FeedGenreEntry.TABLE_NAME, null, values);
 
         if (tableId == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);

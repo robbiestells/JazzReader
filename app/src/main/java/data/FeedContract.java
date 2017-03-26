@@ -24,6 +24,8 @@ public class FeedContract {
     public static final String PATH_FEED = "feed";
     public static final String PATH_ARTISTS = "artist";
     public static final String PATH_GENRES = "genre";
+    public static final String PATH_FEED_ARTIST = "feedArtists";
+    public static final String PATH_FEED_GENRE = "feedGenres";
 
     public static final class FeedEntry implements BaseColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FEED);
@@ -112,6 +114,56 @@ public class FeedContract {
         public static final String COLUMN_GENRE_ID = "genre_id";
         public static final String COLUMN_GENRE_NAME = "genre_name";
         public static final String COLUMN_GENRE_TOPIC = "genre_topic";
+
+        public static Uri buildActivityUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    public static final class FeedArtistEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FEED_ARTIST);
+
+        //string with table uri
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FEED_ARTIST;
+
+        //string with item uri
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FEED_ARTIST;
+
+        // Table name
+        public static final String TABLE_NAME = "feedArtists";
+
+        //Column Names
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_FEED_ARTIST_ID = "feedArtist_id";
+        public static final String COLUMN_FEED_ID= "feed_id";
+        public static final String COLUMN_ARTIST_ID = "artist_id";
+
+        public static Uri buildActivityUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    public static final class FeedGenreEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FEED_GENRE);
+
+        //string with table uri
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FEED_GENRE;
+
+        //string with item uri
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FEED_GENRE;
+
+        // Table name
+        public static final String TABLE_NAME = "feedGenres";
+
+        //Column Names
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_FEED_GENRE_ID = "feed_genre_id";
+        public static final String COLUMN_FEED_ID= "feed_id";
+        public static final String COLUMN_GENRE_ID = "genre_id";
 
         public static Uri buildActivityUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
