@@ -24,7 +24,7 @@ public class FeedDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_FEED_TABLE = "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
-                FeedEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                FeedEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 FeedEntry.COLUMN_ITEM_ID + " TEXT, " +
                 FeedEntry.COLUMN_ITEM_TYPE + " TEXT, " +
                 FeedEntry.COLUMN_ITEM_TITLE + " TEXT, " +

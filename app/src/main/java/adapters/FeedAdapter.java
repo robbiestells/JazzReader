@@ -167,17 +167,17 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
         public void bindData(FeedItem item) {
 
             //get artists
-            artists = item.getArtists();
-            String artistList = "";
-            for (Artist artist : artists) {
-                artistList = artistList + artist.getArtistName() + ", ";
-            }
+//            artists = item.getArtists();
+//            String artistList = "";
+//            for (Artist artist : artists) {
+//                artistList = artistList + artist.getArtistName() + ", ";
+//            }
 
             Id.setText(item.getId());
             Title.setText(item.getTitle());
             Date.setText(item.getCreatedAt());
             Type.setText(item.getType());
-            Artists.setText(artistList.substring(0, artistList.length() - 2));
+         //   Artists.setText(artistList.substring(0, artistList.length() - 2));
             Glide.with(context).load(item.getImageLink()).into(Image);
 
         }

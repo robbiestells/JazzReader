@@ -53,7 +53,7 @@ public class FeedContract {
         public static final String COLUMN_ITEM_ARTICLE = "item_article";
         public static final String COLUMN_ITEM_EVENT_DATE = "item_event_date";
         public static final String COLUMN_ITEM_EVENT_LOCATION = "item_event_location";
-        public static final String COLUMN_ITEM_PRICE= "item_link";
+        public static final String COLUMN_ITEM_PRICE= "item_price";
 
 
         //ArrayList<Artist> artists;

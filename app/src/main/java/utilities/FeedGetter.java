@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -42,6 +43,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import adapters.FeedAdapter;
+import data.FeedContract;
+import data.FeedDbHelper;
 import models.Artist;
 import models.FeedItem;
 import models.Genre;
@@ -73,7 +76,7 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
 
         //TODO check for internet connection
 
-        Toast toast=Toast.makeText(activity.getBaseContext(),"Getting Feed",Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(activity.getBaseContext(), "Getting Feed", Toast.LENGTH_SHORT);
         toast.show();
         //display loading screen
 //        progressDialog = new ProgressDialog(activity);
@@ -89,18 +92,19 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
     @Override
     protected void onPostExecute(ArrayList<FeedItem> feedItems) {
         super.onPostExecute(feedItems);
+        saveFeedItems(feedItems);
         activity.setFeedItems(feedItems);
         //feedAdapter = new FeedAdapter(context, feedItems);
         //dismiss loading dialog
-     //   progressDialog.dismiss();
-        Toast toast=Toast.makeText(activity.getBaseContext(),"Feed updated",Toast.LENGTH_SHORT);
+        //   progressDialog.dismiss();
+        Toast toast = Toast.makeText(activity.getBaseContext(), "Feed updated", Toast.LENGTH_SHORT);
         toast.show();
 
     }
 
     @Override
     protected ArrayList<FeedItem> doInBackground(Void... params) {
-        
+
         String feed = "http://trrc.sliday.com/api/data.json";
         URL url = createUrl(feed);
         String jsonResponse;
@@ -140,7 +144,7 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                 //get channel info
 
 
-                for (int c = 0; c < currentChannel.length(); c++){
+                for (int c = 0; c < currentChannel.length(); c++) {
                     JSONArray articleArray = currentChannel.getJSONArray("articles");
                     for (int a = 0; a < articleArray.length(); a++) {
 
@@ -165,29 +169,29 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                         String eventDate = "";
                         String eventLocation = "";
 
-                        if (type.contains("release") || type.contains("event") || type.contains("link") || type.contains("news")){
-                             shortDescription = currentArticle.getString("shortDescription");
-                             imageLink = currentArticle.getString("imageLink");
-                             imageLinkRetina = currentArticle.getString("imageLinkRetina");
-                             link = currentArticle.getString("link");
+                        if (type.contains("release") || type.contains("event") || type.contains("link") || type.contains("news")) {
+                            shortDescription = currentArticle.getString("shortDescription");
+                            imageLink = currentArticle.getString("imageLink");
+                            imageLinkRetina = currentArticle.getString("imageLinkRetina");
+                            link = currentArticle.getString("link");
                         }
 
                         if (type.contains("release") || type.contains("event")) {
-                             price = currentArticle.getString("price");
+                            price = currentArticle.getString("price");
                         }
 
                         if (type.contains("release")) {
-                             releaseDate = currentArticle.getString("releaseDate");
+                            releaseDate = currentArticle.getString("releaseDate");
                         }
                         if (type.contains("video") || type.contains("news")) {
-                             videoLink = currentArticle.getString("videoLink");
+                            videoLink = currentArticle.getString("videoLink");
                         }
                         if (type.contains("event") || type.contains("news")) {
-                             article = currentArticle.getString("article");
+                            article = currentArticle.getString("article");
                         }
                         if (type.contains("event")) {
-                             eventDate = currentArticle.getString("eventDate");
-                             eventLocation = currentArticle.getString("eventLocation");
+                            eventDate = currentArticle.getString("eventDate");
+                            eventLocation = currentArticle.getString("eventLocation");
                         }
 
                         ArrayList<Artist> artists = new ArrayList<>();
@@ -303,35 +307,44 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
         return url;
     }
 
-//        private void saveFeedItems(ArrayList<FeedItem> feedItems){
-//            FeedDbHelper mDbHelper = new FeedDbHelper(context);
-//            SQLiteDatabase db = mDbHelper.getWritableDatabase();
-//
-//            String query = "SELECT * FROM " + FeedContract.FeedEntry.TABLE_NAME + " WHERE " + FeedContract.FeedEntry.COLUMN_EPIOSDE_AUDIO
-//                    + " =?";
-//
-//            for (FeedItem item:feedItems) {
-//
-//                Cursor cursor = db.rawQuery(query, new String[] {item.getAudioUrl()}) ;
-//
-//                if (cursor.getCount() <= 0){
-//                    //get values
-//                    ContentValues values = new ContentValues();
-//                    values.put(FeedContract.FeedEntry.COLUMN_SHOW_NAME, item.getShow());
-//                    values.put(FeedContract.FeedEntry.COLUMN_EPISODE_TITLE, item.getTitle());
-//                    values.put(FeedContract.FeedEntry.COLUMN_EPIOSDE_LINK, item.getLink());
-//                    values.put(FeedContract.FeedEntry.COLUMN_EPISODE_DESCRIPTION, item.getDescription());
-//                    values.put(FeedContract.FeedEntry.COLUMN_EPISODE_DATE, item.getPubDate());
-//                    values.put(FeedContract.FeedEntry.COLUMN_EPIOSDE_LENGTH, item.getLength());
-//                    values.put(FeedContract.FeedEntry.COLUMN_EPIOSDE_AUDIO, item.getAudioUrl());
-//
-//                    //insert a new entry with the data above
-//                    long newRowId = db.insert(FeedContract.FeedEntry.TABLE_NAME, null, values);
-//                    Log.v("Insert Feed item", "New row ID: " + newRowId);
-//                }
-//                cursor.close();
-//            }
-//
-//            db.close();
-//        }
+    private void saveFeedItems(ArrayList<FeedItem> feedItems) {
+        FeedDbHelper mDbHelper = new FeedDbHelper(activity.getApplicationContext());
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        String query = "SELECT * FROM " + FeedContract.FeedEntry.TABLE_NAME + " WHERE " + FeedContract.FeedEntry.COLUMN_ITEM_ID
+                + " =?";
+
+        for (FeedItem item : feedItems) {
+
+            Cursor cursor = db.rawQuery(query, new String[]{item.getId()});
+
+            if (cursor.getCount() <= 0) {
+                //get values
+                ContentValues values = new ContentValues();
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_ID, item.getId());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_TYPE, item.getType());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_TITLE, item.getTitle());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_SHORT_DESCRIPTION, item.getShortDescription());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_IMAGE_LINK, item.getImageLink());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_IMAGE_RETINA_LINK, item.getImageLinkRetina());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_LINK, item.getLink());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_RELEASE_DATE, item.getReleaseDate());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_SHARE_LINK, item.getShareLink());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_CREATED_AT, item.getCreatedAt());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_UPDATED_AT, item.getUpdatedAt());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_VIDEO_LINK, item.getVideoLink());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_ARTICLE, item.getArticle());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_EVENT_DATE, item.getEventDate());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_EVENT_LOCATION, item.getEventLocation());
+                values.put(FeedContract.FeedEntry.COLUMN_ITEM_PRICE, item.getPrice());
+
+                //insert a new entry with the data above
+                long newRowId = db.insert(FeedContract.FeedEntry.TABLE_NAME, null, values);
+                Log.v("Insert Feed item", "New row ID: " + newRowId);
+            }
+            cursor.close();
+        }
+
+        db.close();
+    }
 }
