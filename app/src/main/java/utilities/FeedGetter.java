@@ -234,6 +234,10 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
 
                         //add feed item to list
                         feedItems.add(feedItem);
+
+                        saveGenres(genres);
+                        saveArtists(artists);
+
                     }
                 }
             }
@@ -243,6 +247,7 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
         //return movie list
         return feedItems;
     }
+
 
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
@@ -341,6 +346,66 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
                 //insert a new entry with the data above
                 long newRowId = db.insert(FeedContract.FeedEntry.TABLE_NAME, null, values);
                 Log.v("Insert Feed item", "New row ID: " + newRowId);
+            }
+            cursor.close();
+        }
+
+        db.close();
+    }
+
+    private static void saveArtists(ArrayList<Artist> artists) {
+        MainActivity mainActivity = MainActivity.getInstance();
+        FeedDbHelper mDbHelper = new FeedDbHelper(mainActivity.getApplicationContext());
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        String query = "SELECT * FROM " + FeedContract.ArtistEntry.TABLE_NAME + " WHERE " + FeedContract.ArtistEntry.COLUMN_ARTIST_ID
+                + " =?";
+
+        for (Artist artist : artists) {
+
+            Cursor cursor = db.rawQuery(query, new String[]{artist.getId()});
+
+            if (cursor.getCount() <= 0) {
+                //get values
+                ContentValues values = new ContentValues();
+                values.put(FeedContract.ArtistEntry.COLUMN_ARTIST_ID, artist.getId());
+                values.put(FeedContract.ArtistEntry.COLUMN_ARTIST_IMAGE, artist.getArtistImage());
+                values.put(FeedContract.ArtistEntry.COLUMN_ARTIST_IMAGE_RETINA, artist.getArtistImageRetina());
+                values.put(FeedContract.ArtistEntry.COLUMN_ARTIST_NAME, artist.getArtistName());
+                values.put(FeedContract.ArtistEntry.COLUMN_TOPIC_NAME, artist.getTopicName());
+
+                //insert a new entry with the data above
+                long newRowId = db.insert(FeedContract.ArtistEntry.TABLE_NAME, null, values);
+                Log.v("Insert Artist item", "New row ID: " + newRowId);
+            }
+            cursor.close();
+        }
+
+        db.close();
+    }
+
+    private static void saveGenres(ArrayList<Genre> genres) {
+        MainActivity mainActivity = MainActivity.getInstance();
+        FeedDbHelper mDbHelper = new FeedDbHelper(mainActivity.getApplicationContext());
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        String query = "SELECT * FROM " + FeedContract.GenreEntry.TABLE_NAME + " WHERE " + FeedContract.GenreEntry.COLUMN_GENRE_ID
+                + " =?";
+
+        for (Genre genre : genres) {
+
+            Cursor cursor = db.rawQuery(query, new String[]{genre.getId()});
+
+            if (cursor.getCount() <= 0) {
+                //get values
+                ContentValues values = new ContentValues();
+                values.put(FeedContract.GenreEntry.COLUMN_GENRE_ID, genre.getId());
+                values.put(FeedContract.GenreEntry.COLUMN_GENRE_NAME, genre.getGenreName());
+                values.put(FeedContract.GenreEntry.COLUMN_GENRE_TOPIC, genre.getTopicName());
+
+                //insert a new entry with the data above
+                long newRowId = db.insert(FeedContract.GenreEntry.TABLE_NAME, null, values);
+                Log.v("Insert Genre item", "New row ID: " + newRowId);
             }
             cursor.close();
         }

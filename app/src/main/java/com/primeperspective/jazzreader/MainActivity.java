@@ -155,17 +155,18 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         intent.putExtra("type", "release");
         startActivity(intent);
 
-        } else if (id == R.id.nav_artists) {
-
-        } else if (id == R.id.nav_genres) {
-
-        } else if (id == R.id.nav_favorites) {
-
-        } else if (id == R.id.nav_channels) {
-
-        } else if (id == R.id.nav_about_us) {
-
         }
+//        else if (id == R.id.nav_artists) {
+//
+//        } else if (id == R.id.nav_genres) {
+//
+//        } else if (id == R.id.nav_favorites) {
+//
+//        } else if (id == R.id.nav_channels) {
+//
+//        } else if (id == R.id.nav_about_us) {
+//
+//        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

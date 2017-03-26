@@ -1,6 +1,7 @@
 package data;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -21,6 +22,8 @@ public class FeedContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_FEED = "feed";
+    public static final String PATH_ARTISTS = "artist";
+    public static final String PATH_GENRES = "genre";
 
     public static final class FeedEntry implements BaseColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FEED);
@@ -55,10 +58,63 @@ public class FeedContract {
         public static final String COLUMN_ITEM_EVENT_LOCATION = "item_event_location";
         public static final String COLUMN_ITEM_PRICE= "item_price";
 
-
-        //ArrayList<Artist> artists;
-        //ArrayList<Genre> genres;
+        public static Uri buildActivityUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
 
     }
 
+    public static final class ArtistEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_ARTISTS);
+
+        //string with table uri
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ARTISTS;
+
+        //string with item uri
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ARTISTS;
+
+        // Table name
+        public static final String TABLE_NAME = "artist";
+
+        //Column Names
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_ARTIST_ID = "artist_id";
+        public static final String COLUMN_ARTIST_NAME = "artist_name";
+        public static final String COLUMN_TOPIC_NAME = "topic_name";
+        public static final String COLUMN_ARTIST_IMAGE = "artist_image";
+        public static final String COLUMN_ARTIST_IMAGE_RETINA = "artist_retina_image";
+        public static final String ARTIST_BIO= "artist_bio";
+
+        public static Uri buildActivityUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+    }
+
+    public static final class GenreEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_GENRES);
+
+        //string with table uri
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GENRES;
+
+        //string with item uri
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GENRES;
+
+        // Table name
+        public static final String TABLE_NAME = "genre";
+
+        //Column Names
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_GENRE_ID = "genre_id";
+        public static final String COLUMN_GENRE_NAME = "genre_name";
+        public static final String COLUMN_GENRE_TOPIC = "genre_topic";
+
+        public static Uri buildActivityUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
 }

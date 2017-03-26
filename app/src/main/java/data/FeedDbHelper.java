@@ -5,7 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import data.FeedContract.ArtistEntry;
 import data.FeedContract.FeedEntry;
+import data.FeedContract.GenreEntry;
 
 /**
  * Created by robbi on 3/26/2017.
@@ -42,12 +44,31 @@ public class FeedDbHelper extends SQLiteOpenHelper {
                 FeedEntry.COLUMN_ITEM_EVENT_LOCATION + " TEXT, " +
                 FeedEntry.COLUMN_ITEM_PRICE + " TEXT);";
 
+        final String SQL_CREATE_ARTIST_TABLE = "CREATE TABLE " + ArtistEntry.TABLE_NAME + " (" +
+                ArtistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ArtistEntry.COLUMN_ARTIST_ID + " TEXT, " +
+                ArtistEntry.COLUMN_ARTIST_NAME + " TEXT, " +
+                ArtistEntry.COLUMN_TOPIC_NAME + " TEXT, " +
+                ArtistEntry.COLUMN_ARTIST_IMAGE + " TEXT, " +
+                ArtistEntry.COLUMN_ARTIST_IMAGE_RETINA + " TEXT, " +
+                ArtistEntry.ARTIST_BIO + " TEXT);";
+
+        final String SQL_CREATE_GENRE_TABLE = "CREATE TABLE " + GenreEntry.TABLE_NAME + " (" +
+                GenreEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                GenreEntry.COLUMN_GENRE_ID + " TEXT, " +
+                GenreEntry.COLUMN_GENRE_NAME + " TEXT, " +
+                GenreEntry.COLUMN_GENRE_TOPIC + " TEXT);";
+
         sqLiteDatabase.execSQL(SQL_CREATE_FEED_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_ARTIST_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_GENRE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ArtistEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + GenreEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }
