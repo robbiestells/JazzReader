@@ -252,8 +252,8 @@ public class FeedGetter extends AsyncTask<Void, Void, ArrayList<FeedItem>> {
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setReadTimeout(20000 /* milliseconds */);
+            urlConnection.setConnectTimeout(30000 /* milliseconds */);
             urlConnection.connect();
 
             if (urlConnection.getResponseCode() == 200) {

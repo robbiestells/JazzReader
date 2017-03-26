@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import models.Artist;
 import models.FeedItem;
 
+import static android.R.attr.id;
+
 /**
  * Created by rob on 3/2/17.
  */
@@ -142,7 +144,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title, Date, Type, Artists;
+        TextView Title, Date, Type, Artists, Id;
         ImageView Image;
         CardView cardView;
         ArrayList<Artist> artists;
@@ -159,7 +161,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             Image = (ImageView) itemView.findViewById(R.id.postImage);
             cardView = (CardView) itemView.findViewById(R.id.feedItemCard);
             Artists = (TextView) itemView.findViewById(R.id.postArtists);
-
+            Id = (TextView) itemView.findViewById(R.id.postId);
         }
 
         public void bindData(FeedItem item) {
@@ -171,6 +173,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
                 artistList = artistList + artist.getArtistName() + ", ";
             }
 
+            Id.setText(item.getId());
             Title.setText(item.getTitle());
             Date.setText(item.getCreatedAt());
             Type.setText(item.getType());
@@ -191,7 +194,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class ReleaseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title, Type;
+        TextView Title, Type, Id;
         //        ImageButton playButton;
         CardView cardView;
 
@@ -201,6 +204,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             itemView.setOnClickListener(this);
 
             //get views
+            Id = (TextView) itemView.findViewById(R.id.postId);
             Title = (TextView) itemView.findViewById(R.id.postTitle);
             Type = (TextView) itemView.findViewById(R.id.postType);
             //playButton = (ImageButton) itemView.findViewById(playEpisode);
@@ -211,6 +215,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             Title.setText(item.getTitle());
             Type.setText(item.getType());
+            Id.setText(item.getId());
         }
 
         @Override
@@ -224,7 +229,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class VideoViewHolder extends RecyclerView.ViewHolder {
-        TextView videoTitle;
+        TextView videoTitle, Id;
         WebView videoView;
         ImageView videoImage;
         CardView cardView;
@@ -237,6 +242,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             //itemView.setOnClickListener(this);
 
             //get views
+            Id = (TextView) itemView.findViewById(R.id.postId);
             videoView = (WebView) itemView.findViewById(R.id.videoView);
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
             videoImage = (ImageView) itemView.findViewById(R.id.videoImage);
@@ -259,6 +265,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
                 //TODO get vimeo preview image
             }
 
+            Id.setText(item.getId());
             videoTitle.setText(item.getTitle());
             videoTitle.setVisibility(View.VISIBLE);
             //TODO decide whether or not to keep preview image
@@ -368,7 +375,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title, EventDate, Type;
+        TextView Title, EventDate, Type, Id;
         ImageView Image;
         CardView cardView;
 
@@ -378,6 +385,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             itemView.setOnClickListener(this);
 
             //get views
+            Id = (TextView) itemView.findViewById(R.id.postId);
+
             Title = (TextView) itemView.findViewById(R.id.postTitle);
             // Type = (TextView) itemView.findViewById(R.id.postType);
             EventDate = (TextView) itemView.findViewById(R.id.eventDate);
@@ -387,6 +396,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         public void bindData(FeedItem item) {
 
+            Id.setText(item.getId());
             Title.setText(item.getTitle());
             EventDate.setText(item.getEventDate());
             //  Type.setText(item.getType());
@@ -404,7 +414,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public class LinkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView Title, Date, Type;
+        TextView Title, Date, Type, Id;
         //ImageView Image;
         CardView cardView;
 
@@ -414,6 +424,8 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             itemView.setOnClickListener(this);
 
             //get views
+            Id = (TextView) itemView.findViewById(R.id.postId);
+
             Title = (TextView) itemView.findViewById(R.id.postTitle);
             Type = (TextView) itemView.findViewById(R.id.postType);
             Date = (TextView) itemView.findViewById(R.id.postDate);
@@ -422,7 +434,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
 
         public void bindData(FeedItem item) {
-
+            Id.setText(item.getId());
             Title.setText(item.getTitle());
             Date.setText(item.getCreatedAt());
             Type.setText(item.getType());

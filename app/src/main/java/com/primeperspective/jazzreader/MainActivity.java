@@ -62,11 +62,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     public void setFeedItems(ArrayList<FeedItem> items){
         ArrayList<FeedItem> displayItems = new ArrayList<>();
         if (items != null) {
-           for (int i = 0; i < 30; i++) {
-               displayItems.add(items.get(i));
-           }
+//           for (int i = 0; i < 30; i++) {
+//               displayItems.add(items.get(i));
+//           }
 
-           feedAdapter = new FeedAdapter(this, displayItems);
+//           feedAdapter = new FeedAdapter(this, displayItems);
+            feedAdapter = new FeedAdapter(this, items);
            feedList.setAdapter(feedAdapter);
 
 //        feedList.getLayoutManager().isSmoothScrolling();
