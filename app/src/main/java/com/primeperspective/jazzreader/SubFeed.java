@@ -22,6 +22,7 @@ import adapters.FeedAdapter;
 import models.Artist;
 import models.FeedItem;
 import models.Genre;
+import utilities.Utilities;
 
 import static android.R.attr.type;
 import static com.primeperspective.jazzreader.R.id.default_activity_button;
@@ -49,152 +50,15 @@ public class SubFeed extends AppCompatActivity {
 
         Intent intent = getIntent();
         filterType = intent.getStringExtra("type");
-
-        MainActivity activity = MainActivity.getInstance();
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        String lastJSON = sharedPref.getString("lastJSON", "first");
-        if (lastJSON != "first"){
-            feedItems = extractFeatureFromJson(lastJSON, filterType);
-            setFeedItems(feedItems);
-            //feedItems.clear();
-        }
-
+        feedItems = Utilities.getSavedType(this, filterType);
+        setFeedItems(feedItems);
 
     }
+
     public void setFeedItems(ArrayList<FeedItem> items){
-        ArrayList<FeedItem> displayItems = new ArrayList<>();
         if (items != null) {
-            for (int i = 0; i < 30; i++) {
-                displayItems.add(items.get(i));
-            }
-
-            feedAdapter = new FeedAdapter(this, displayItems);
+            feedAdapter = new FeedAdapter(this, items);
             feedList.setAdapter(feedAdapter);
-
-//        feedList.getLayoutManager().isSmoothScrolling();
         }
-    }
-
-    public static ArrayList<FeedItem> extractFeatureFromJson(String channelJson, String filterType) {
-        if (TextUtils.isEmpty(channelJson)) {
-            return null;
-        }
-
-        ArrayList<FeedItem> feedItems = new ArrayList<>();
-
-        try {
-            JSONObject baseJsonResponse = new JSONObject(channelJson);
-
-            JSONArray resultArray = baseJsonResponse.getJSONArray("channels");
-
-            // For each movie in the array, create a Movie object and add it to the ArrayList
-            for (int i = 0; i < resultArray.length(); i++) {
-                JSONObject currentChannel = resultArray.getJSONObject(i);
-
-                //get channel info
-
-
-                for (int c = 0; c < currentChannel.length(); c++){
-                    JSONArray articleArray = currentChannel.getJSONArray("articles");
-                    for (int a = 0; a < articleArray.length(); a++) {
-
-                        //get article info
-                        JSONObject currentArticle = articleArray.getJSONObject(a);
-
-                        // Extract out data
-                        String id = currentArticle.getString("id");
-                        String title = currentArticle.getString("title");
-                        String type = currentArticle.getString("type");
-                        String shareLink = currentArticle.getString("shareLink");
-                        String createdAt = currentArticle.getString("createdAt");
-                        String updatedAt = currentArticle.getString("updatedAt");
-                        String shortDescription = "";
-                        String imageLink = "";
-                        String imageLinkRetina = "";
-                        String link = "";
-                        String price = "";
-                        String releaseDate = "";
-                        String videoLink = "";
-                        String article = "";
-                        String eventDate = "";
-                        String eventLocation = "";
-
-                        if (type.contains(filterType)){
-                            if (type.contains("release") || type.contains("event") || type.contains("link") || type.contains("news")){
-                                shortDescription = currentArticle.getString("shortDescription");
-                                imageLink = currentArticle.getString("imageLink");
-                                imageLinkRetina = currentArticle.getString("imageLinkRetina");
-                                link = currentArticle.getString("link");
-                            }
-
-                            if (type.contains("release") || type.contains("event")) {
-                                price = currentArticle.getString("price");
-                            }
-
-                            if (type.contains("release")) {
-                                releaseDate = currentArticle.getString("releaseDate");
-                            }
-                            if (type.contains("video") || type.contains("news")) {
-                                videoLink = currentArticle.getString("videoLink");
-                            }
-                            if (type.contains("event") || type.contains("news")) {
-                                article = currentArticle.getString("article");
-                            }
-                            if (type.contains("event")) {
-                                eventDate = currentArticle.getString("eventDate");
-                                eventLocation = currentArticle.getString("eventLocation");
-                            }
-
-                            ArrayList<Artist> artists = new ArrayList<>();
-                            JSONArray artistArray = currentArticle.getJSONArray("artists");
-                            for (int ar = 0; ar < artistArray.length(); ar++) {
-                                JSONObject currentArtist = artistArray.getJSONObject(ar);
-
-                                //extract artist data
-                                String artistId = currentArtist.getString("id");
-                                String artistName = currentArtist.getString("artistName");
-                                String topicName = currentArtist.getString("topicName");
-                                String artistImage = currentArtist.getString("artistImage");
-                                String artistImageRetina = currentArtist.getString("artistImageRetina");
-                                String artistBio = currentArtist.getString("artistBio");
-
-                                Artist artist = new Artist(artistId, artistName, topicName, artistImage, artistImageRetina, artistBio);
-                                artists.add(artist);
-
-                            }
-
-                            ArrayList<Genre> genres = new ArrayList<>();
-                            JSONArray genreArray = currentArticle.getJSONArray("genres");
-                            for (int g = 0; g < genreArray.length(); g++) {
-                                JSONObject currentGenre = genreArray.getJSONObject(g);
-
-                                //extract artist data
-                                String genreId = currentGenre.getString("id");
-                                String genreName = currentGenre.getString("genreName");
-                                String topicName = currentGenre.getString("topicName");
-
-                                Genre genre = new Genre(genreId, genreName, topicName);
-                                genres.add(genre);
-
-                            }
-
-                            // Create a new FeedItem object
-                            FeedItem feedItem = new FeedItem(id, type, title, shortDescription, imageLink, imageLinkRetina,
-                                    link, releaseDate, shareLink, createdAt, updatedAt, artists, genres, videoLink, article,
-                                    eventDate, eventLocation, price);
-
-                            //add feed item to list
-                            feedItems.add(feedItem);
-                        }
-
-
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            Log.e("SubFeed", "Problem parsing the old JSON", e);
-        }
-        //return movie list
-        return feedItems;
     }
 }

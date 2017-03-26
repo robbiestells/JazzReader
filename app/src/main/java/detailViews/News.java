@@ -1,39 +1,29 @@
-package com.primeperspective.jazzreader;
+package detailViews;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.primeperspective.jazzreader.MainActivity;
+import com.primeperspective.jazzreader.R;
 
-import java.util.ArrayList;
-
-import adapters.FeedAdapter;
 import models.FeedItem;
 import utilities.Utilities;
 
-import static android.R.attr.mimeType;
-import static android.text.Html.FROM_HTML_MODE_COMPACT;
-import static com.primeperspective.jazzreader.R.id.postArticle;
-import static com.primeperspective.jazzreader.R.id.postTitle;
-import static com.primeperspective.jazzreader.R.id.toolbar;
-
 /**
- * Created by rob on 3/7/17.
+ * Created by robbi on 3/26/2017.
  */
 
-public class Details extends AppCompatActivity {
+public class News extends AppCompatActivity {
+
     MainActivity activity;
     FeedItem feedItem;
     String feedItemId;
@@ -56,7 +46,7 @@ public class Details extends AppCompatActivity {
         TextView postLink = (TextView) findViewById(R.id.postLink);
         WebView postArticle = (WebView) findViewById(R.id.postArticle);
 
-        postTitle.setText(feedItem.getTitle());
+       // postTitle.setText(feedItem.getTitle());
 
         postLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +66,7 @@ public class Details extends AppCompatActivity {
         }
         Glide.with(this).load(feedItem.getImageLinkRetina()).into(feedImage);
 
-      //  this.getSupportActionBar().setTitle(feedItem.getTitle());
+        //  this.getSupportActionBar().setTitle(feedItem.getTitle());
         this.getSupportActionBar().setDisplayShowTitleEnabled(false);
 
     }

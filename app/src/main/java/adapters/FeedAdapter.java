@@ -2,6 +2,7 @@ package adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -178,7 +179,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             Date.setText(item.getCreatedAt());
             Type.setText(item.getType());
          //   Artists.setText(artistList.substring(0, artistList.length() - 2));
-            Glide.with(context).load(item.getImageLink()).into(Image);
+            Glide.with(context).load(item.getImageLinkRetina()).into(Image);
 
         }
 
@@ -188,8 +189,11 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
             FeedItem selected = feedItems.get(getPosition());
 
             MainActivity mainActivity = MainActivity.getInstance();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Image.setTransitionName("transition" + selected.getId());
+            }
             mainActivity.goToDetail(selected, Image);
-            Image.setTransitionName("transition" + selected.getId());
+
         }
     }
 
@@ -303,7 +307,7 @@ public class FeedAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                         String youtubeUrl = "src=\"https://www.youtube.com/embed/" + videoId + "?autoplay=1\"";
                         String iframe = " <iframe width=\"" + test + "\" height=\"200\"" + youtubeUrl + " frameborder=\"0\" allowfullscreen></iframe>";
-                       
+
                         videoView.getSettings().setJavaScriptEnabled(true);
                         videoView.loadDataWithBaseURL("", iframe, "text/html", "UTF-8", "");
                     }

@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Details">
+        <activity android:name="detailViews.News">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -29,7 +29,7 @@
                 android:value=".MainActivity" />
         </activity>
         <provider
-            android:authorities="com.primeperspective.jazzreader"
+            android:authorities="com.example.studio111.commentist"
             android:name="data.FeedProvider"
             android:exported="false"/>
 

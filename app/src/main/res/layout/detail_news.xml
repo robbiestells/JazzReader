@@ -46,15 +46,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/postTitle"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+            <!--<TextView-->
+                <!--android:id="@+id/postTitle"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content" />-->
 
             <TextView
                 android:id="@+id/postLink"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="View in browser"/>
 
             <WebView
                 android:layout_width="match_parent"
